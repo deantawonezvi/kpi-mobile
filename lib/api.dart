@@ -7,3 +7,4 @@ BaseOptions options = new BaseOptions(
     );
 
 const String LOGIN = '/login';
+const String TASKS = '/tasks';

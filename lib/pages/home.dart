@@ -1,9 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:production_entry/api.dart';
 import 'package:production_entry/images.dart';
 import 'package:production_entry/models/auth-model.dart';
+import 'package:production_entry/models/dto/response/tasks.dart';
+import 'package:production_entry/pages/tasks/task.dart';
+import 'package:production_entry/theme.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,11 +34,25 @@ class _HomePageState extends State<HomePage> {
   var scannedItems = <String>[];
 
   AuthModel authModel;
+  TasksResponse tasksResponse;
 
   void functionInitialise(BuildContext context) {
     setState(() {
       authModel = Provider.of<AuthModel>(context, listen: true);
     });
+  }
+
+  getPendingTasks() async {
+    Response response = await Dio(options).post(TASKS,
+        data: {
+          "user_id": authModel.user.user.id,
+        });
+    print(response.data);
+    return TasksResponse.fromJson(response.data);
+
+
+
+    print(response);
   }
 
   @override
@@ -63,39 +83,64 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Divider(thickness: 2,),
             ),
-            ListView.builder(
-              itemCount: scannedItems.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    title: Text("Item"),
-                    subtitle: Text('${scannedItems[index]}'),
-                    onTap: (){
-                      print("Send Item");
-                    },
-                  ),
-                );
-              },
-            )
+            Text('Tasks',textScaleFactor: 2,),
+            FutureBuilder(
+              future: getPendingTasks(),
+                builder: (context,snapshot){
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: new Center(
+                            child: SpinKitWave(
+                              color: Colors.black,
+                              size: 30.0,
+                            )),
+                      ),
+                    );
+                  }
+                  else{
+                    return ListView.builder(
+                      itemCount: snapshot.data.tasks.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 2,
+                          shadowColor: Colors.yellow,
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Text(snapshot.data.tasks[index].name),
+                                Text("(${snapshot.data.tasks[index].status})",style: TextStyle(color: Colors.amber),),
+                              ],
+                            ),
+                            subtitle: Text('Expected Output: ${snapshot.data.tasks[index].expectedOutput}'),
+                            trailing: Icon(Icons.arrow_forward_outlined),
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          TaskViewPage(
+                                            task: snapshot
+                                                .data.tasks[index],
+                                          )));
+
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  }
+
+
+            }),
+
 
 
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-              "#ffffff",
-              "Cancel",
-              true,
-              ScanMode.DEFAULT);
-
-          setState(() {
-            scannedItems.add(barcodeScanRes);
-          });
-        },
-        child: Icon(FontAwesome5Solid.barcode),
       ),
     );
   }
