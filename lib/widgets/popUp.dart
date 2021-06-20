@@ -115,9 +115,9 @@ void showLoader(BuildContext context, text) {
           content: new Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SpinKitThreeBounce(
+              SpinKitFadingCircle(
                 size: 30.0,
-                color: primaryColor,
+                color: Colors.black,
               ),
               new Padding(padding: EdgeInsets.only(right: 30)),
               new Text(text)

@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:production_entry/api.dart';
 import 'package:production_entry/models/dto/response/tasks.dart';
+import 'package:production_entry/widgets/popUp.dart';
 
 class TaskOutputPage extends StatefulWidget {
   final Task task;
@@ -13,6 +18,8 @@ class TaskOutputPage extends StatefulWidget {
 
 class _TaskOutputPageState extends State<TaskOutputPage> {
   var scannedItems = <String>[];
+
+  var responseData;
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +56,77 @@ class _TaskOutputPageState extends State<TaskOutputPage> {
               "#ffffff", "Cancel", true, ScanMode.DEFAULT);
 
           setState(() {
-            scannedItems.add(barcodeScanRes);
+            _showPrompt(barcodeScanRes);
           });
         },
         child: Icon(FontAwesome5Solid.barcode),
       )
           : SizedBox(),
     );
+  }
+
+  _showPrompt(item) {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Confirm'),
+        content: new Text('Are you sure you want to add $item?'),
+        actions: <Widget>[
+          new TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('No'),
+          ),
+          new TextButton(
+            onPressed: (){
+              Navigator.of(context).pop(false);
+              _sendRequest(item);
+              },
+            child: new Text('Yes'),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+
+  Future<void> _sendRequest(item) async {
+    showLoader(context, "Please wait...");
+
+
+    try{
+
+      Response response = await Dio(options).post(TASK_OUTPUT,
+          data: {
+            "task_id": widget.task.id,
+            "output_value": item
+          });
+      dismissLoader(context);
+
+      try{
+        var loginResponse = jsonDecode(response.data);
+        responseData = loginResponse;
+      } catch(e){
+        responseData = response.data;
+      }
+
+      if(responseData['code'] != '00'){
+        showErrorMessage(context, "Something went wrong. Please try again");
+        return;
+      }
+
+      showSuccessMessage(context, "You have accepted the task");
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+
+    }on DioError catch (e){
+      print(e);
+      dismissLoader(context);
+      showErrorMessage(context, "Something went wrong. Please try again");
+
+    }
+
+
+
+
   }
 }

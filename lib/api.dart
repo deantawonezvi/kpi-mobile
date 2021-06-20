@@ -9,3 +9,4 @@ BaseOptions options = new BaseOptions(
 const String LOGIN = '/login';
 const String TASKS = '/tasks';
 const String TASK_ACCEPT = '/task/accept';
+const String TASK_OUTPUT = '/task/output';

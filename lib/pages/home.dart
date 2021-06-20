@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                       child: new Container(
                         height: MediaQuery.of(context).size.height * 0.1,
                         child: new Center(
-                            child: SpinKitWave(
+                            child: SpinKitFadingCircle(
                               color: Colors.black,
                               size: 30.0,
                             )),
