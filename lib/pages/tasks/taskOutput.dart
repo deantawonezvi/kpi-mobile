@@ -116,7 +116,7 @@ class _TaskOutputPageState extends State<TaskOutputPage> {
       }
 
       showSuccessMessage(context, "You have accepted the task");
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/success', (_) => false);
 
     }on DioError catch (e){
       print(e);

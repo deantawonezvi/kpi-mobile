@@ -43,16 +43,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   getPendingTasks() async {
-    Response response = await Dio(options).post(TASKS,
-        data: {
-          "user_id": authModel.user.user.id,
-        });
-    print(response.data);
-    return TasksResponse.fromJson(response.data);
+    try {
+      Response response = await Dio(options).post(TASKS,
+          data: {
+            "user_id": authModel.user.user.id,
+          });
+      print(response.data);
+      return TasksResponse.fromJson(response.data);
+    } catch(e){
+      print(e);
+    }
 
 
 
-    print(response);
   }
 
   @override
@@ -115,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                                 Text("(${snapshot.data.tasks[index].status})",style: TextStyle(color: Colors.amber),),
                               ],
                             ),
-                            subtitle: Text('Completion: ${((snapshot.data.tasks[index].outputs.length/snapshot.data.tasks[index].expectedOutput)*100).toStringAsFixed(2)}%'),
+                            subtitle: Text('Completion: ${((snapshot.data.tasks[index].outputs.length/int.parse(snapshot.data.tasks[index].expectedOutput))*100).toStringAsFixed(2)}%'),
                             trailing: Icon(Icons.arrow_forward_outlined),
                             onTap: (){
                               Navigator.push(

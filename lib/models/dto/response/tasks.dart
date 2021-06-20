@@ -55,18 +55,18 @@ class Task {
     this.outputs,
   });
 
-  int id;
+  dynamic id;
   String name;
-  int employeeId;
-  int expectedCompletionTime;
+  dynamic employeeId;
+  dynamic expectedCompletionTime;
   dynamic actualCompletionTime;
-  int expectedOutput;
+  dynamic expectedOutput;
   dynamic actualOutput;
-  int importance;
-  int cost;
-  int supervisor;
+  dynamic importance;
+  dynamic cost;
+  dynamic supervisor;
   DateTime assignedDate;
-  int taskExpiry;
+  dynamic taskExpiry;
   dynamic startedDate;
   dynamic completedDate;
   dynamic comments;
@@ -130,8 +130,8 @@ class Output {
     this.updatedAt,
   });
 
-  int id;
-  int taskId;
+  dynamic id;
+  dynamic taskId;
   String outputType;
   String outputValue;
   DateTime createdAt;

@@ -50,7 +50,7 @@ class UserClass {
   String name;
   String email;
   String mobile;
-  int status;
+  bool status;
   dynamic emailVerifiedAt;
   String type;
   String department;

@@ -90,7 +90,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(widget.task.expectedCompletionTime.toString(),
+                      child: Text(widget.task.expectedCompletionTime,
                           textScaleFactor: 1.3),
                     ),
                   ]),
@@ -101,7 +101,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(widget.task.expectedOutput.toString(),
+                      child: Text(widget.task.expectedOutput,
                           textScaleFactor: 1.3),
                     ),
                   ]),
@@ -135,7 +135,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         ((widget.task.outputs.length /
-                                        widget.task.expectedOutput) *
+                                        int.parse(widget.task.expectedOutput)) *
                                     100)
                                 .toStringAsFixed(2) +
                             "%",
@@ -269,7 +269,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
       }
 
       showSuccessMessage(context, "You have accepted the task");
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/success', (_) => false);
 
     }on DioError catch (e){
       print(e);

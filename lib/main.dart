@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:production_entry/models/auth-model.dart';
 import 'package:production_entry/pages/auth/login.dart';
 import 'package:production_entry/pages/home.dart';
+import 'package:production_entry/pages/tasks/successPage.dart';
 import 'package:provider/provider.dart';
 
 
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           '/login': (BuildContext context) => new LoginPage(),
           '/home': (BuildContext context) => new HomePage(),
+          '/success': (BuildContext context) => new SuccessPage(),
 
         },
       ),
