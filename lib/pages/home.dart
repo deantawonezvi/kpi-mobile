@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                                 Text("(${snapshot.data.tasks[index].status})",style: TextStyle(color: Colors.amber),),
                               ],
                             ),
-                            subtitle: Text('Expected Output: ${snapshot.data.tasks[index].expectedOutput}'),
+                            subtitle: Text('Completion: ${((snapshot.data.tasks[index].outputs.length/snapshot.data.tasks[index].expectedOutput)*100).toStringAsFixed(2)}%'),
                             trailing: Icon(Icons.arrow_forward_outlined),
                             onTap: (){
                               Navigator.push(
