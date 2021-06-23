@@ -107,6 +107,7 @@ class _HomePageState extends State<HomePage> {
                     return ListView.builder(
                       itemCount: snapshot.data.tasks.length,
                       shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Card(
                           elevation: 2,

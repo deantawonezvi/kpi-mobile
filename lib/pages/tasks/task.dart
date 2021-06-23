@@ -188,7 +188,9 @@ class _TaskViewPageState extends State<TaskViewPage> {
                   ),
                 ),
               )
-            else
+            else if(widget.task.status == 'COMPLETED')
+              SizedBox()
+            else if(widget.task.status == 'ACCEPTED')
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
